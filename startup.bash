@@ -5,10 +5,21 @@ if [[ -z "${DKIM_DOMAIN}" ]] || [[ -z "${DKIM_SELECTOR}" ]]; then
     exit 1
 fi
 
+#just add a volume to /etc/postfix/certs for enabling tls
+if [ -d "/etc/postfix/certs"]; then
+	USE_TLS="yes"
+else
+	USE_TLS="no"
+fi
+
 echo -e "\e[32mDKIM_* variables:\e[0m"
 echo -e "   DKIM_DOMAIN = ${DKIM_DOMAIN}"
 echo -e "   DKIM_SELECTOR = ${DKIM_SELECTOR}"
+echo -e "   USE_TLS = ${USE_TLS}"
 echo
+
+
+
 
 if [[ ! -f "/etc/opendkim/keys/${DKIM_SELECTOR}.private" ]]; then
     echo -e "\e[32mNo opendkim key found; generation new one ...\e[0m"
@@ -33,6 +44,8 @@ echo -e "\e[32mto:\e[0m"
 sed -i -- "s/{{DKIM_DOMAIN}}/${DKIM_DOMAIN}/g" /etc/opendkim/*Table
 sed -i -- "s/{{DKIM_SELECTOR}}/${DKIM_SELECTOR}/g" /etc/opendkim/*Table
 cat /etc/opendkim/*Table
+sed -i -- "s/{{USE_TLS}}/${USE_TLS}/g" /etc/postfix/main.cf
+cat /etc/postfix/main.cf
 echo
 
 chown -R opendkim:opendkim /etc/opendkim
