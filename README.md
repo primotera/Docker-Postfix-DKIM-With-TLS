@@ -30,6 +30,20 @@ docker run \
 	-v $(pwd)/mail.private:/etc/opendkim/keys/mail.private \
 	glavich/docker-postfix:latest
 ```
+## Create container with tls encryption letsencrypt
+
+If you already have generated your cert keys with letsencrypt
+just share the volume with the container here you will replace mail by the given DKIM_DOMAIN
+
+```sh
+docker run \
+	-d \
+	-e DKIM_DOMAIN=example.com \
+	-e DKIM_SELECTOR=mail \
+	-v $(pwd)/mail.private:/etc/opendkim/keys/mail.private \
+	-v /etc/letsencrypt/live/mail:/etc/letsencrypt/live/mail \
+	glavich/docker-postfix:latest
+```
 
 ### Generate private key with opendkim-genkey
 
