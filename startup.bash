@@ -6,7 +6,7 @@ if [[ -z "${DKIM_DOMAIN}" ]] || [[ -z "${DKIM_SELECTOR}" ]]; then
 fi
 
 #just add a volume to /etc/postfix/certs for enabling tls
-if [ -d "/etc/postfix/certs"]; then
+if [ -d "/etc/postfix/certs" ]; then
 	USE_TLS="yes"
 else
 	USE_TLS="no"
